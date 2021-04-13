@@ -1,2 +1,2 @@
-# FrenchBot2
+# FrenchBot
 Just a simple discord bot written in python. Nothing else.
