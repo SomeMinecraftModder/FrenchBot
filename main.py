@@ -2,6 +2,7 @@
 
 import discord
 import random
+import random
 
 client = discord.Client()
 
@@ -29,6 +30,20 @@ async def about_en(ctx):  # about in english
                           description="This bot is just a little experiment. \n It just send message when you say some "
                                       "specific stuff :) \n Made by Windows XP#4881",
                           color=0xFF5733)
+    await ctx.send(embed=embed)
+
+
+async def error_en(ctx, reason):  # error in english
+    embed = discord.Embed(title="Error !",
+                          description="There a error!:\n%s" % reason,
+                          color=0xFF0000)
+    await ctx.send(embed=embed)
+
+
+async def error_fr(ctx, reason):  # error in english
+    embed = discord.Embed(title="Erreur !",
+                          description="Il y a une erreur !:\n%s" % reason,
+                          color=0xFF0000)
     await ctx.send(embed=embed)
 
 
@@ -75,7 +90,6 @@ async def on_message(message):
     # await message.add_reaction("🐣")
     # await message.add_reaction("🐤")
     # await message.add_reaction("🐓")
-
     if "language" in message.content:
         await message.channel.send('*Did you know that french is the best language ever ?*')
         await message.channel.send('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.languagemagazine'
@@ -93,13 +107,15 @@ async def on_message(message):
     if message.content == '=help':
         await message.channel.send('```list of command:\n=help: show this message\n=about: about this bot\n=null: '
                                    'how to null\n=math start: a simple but hard math game\n=math stop: stop the '
-                                   'current math game\n=numserver: give the number of server where FrenchBot is in```')
+                                   'current math game\n=numserver: give the number of server where FrenchBot is '
+                                   'in\n=randomnum: give a random number, note: put two numbers after the command```') 
     if message.content == '=aide':
         await message.channel.send('```listes des commandes:\n=aide: affiche ce message\n=apropos: a propos de ce '
                                    'bot\n=rien: un guide pour ne rien dire. littéralement.\n=math commence: un petit '
                                    'jeu '
                                    'sur les math\n=math arrete: stope le jeu de math\n=listeserveur: donne le nombre '
-                                   'de serveur dans lequelle il y a FrenchBot '
+                                   'de serveur dans lequelle il y a FrenchBot\n=chiffrealeatoire: donne un chiffre '
+                                   'aléatoire, note: mettez deux chiffre après la commande '
                                    '```')
     if message.content == "=about":
         await about_en(message.channel)
@@ -114,6 +130,39 @@ async def on_message(message):
         await message.channel.send("I'm in " + str(len(client.guilds)) + " servers!")
     if message.content.startswith('=listeserveur'):
         await message.channel.send("Je suis dans " + str(len(client.guilds)) + " serveurs!")
+    if message.content.startswith('=randomnum'):
+        command_valid = 1
+        arg = message.content.split()
+        if not(len(arg) == 3):
+            await error_en(message.channel, "Provided more or less then 3 argument")
+            command_valid = 0
+        try:
+            arg[1] = int(arg[1])
+            arg[2] = int(arg[2])
+        except ValueError:
+            await error_en(message.channel, "At least one of the argument was not a number")
+            command_valid = 0
+        except IndexError:
+            pass
+        if command_valid:
+            await message.channel.send(str(random.randint(arg[1], arg[2])))
+    if message.content.startswith('=chiffrealeatoire'):
+        command_valid_fr = 1
+        arg_fr = message.content.split()
+        if not(len(arg_fr) == 3):
+            await error_fr(message.channel, "Il y a plus ou moin de 3 arguments")
+            command_valid_fr = 0
+        try:
+            arg_fr[1] = int(arg_fr[1])
+            arg_fr[2] = int(arg_fr[2])
+        except ValueError:
+            await error_fr(message.channel, "At least one of the argument was not a number")
+            command_valid_fr = 0
+        except IndexError:
+            pass
+        if command_valid_fr:
+            await message.channel.send(str(random.randint(arg_fr[1], arg_fr[2])))
+
     if message.content == "=math start":
         global math_game_en
         global current_math_channel
