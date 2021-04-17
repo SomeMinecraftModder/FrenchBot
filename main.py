@@ -2,7 +2,6 @@
 
 import discord
 import random
-import random
 
 client = discord.Client()
 
@@ -86,6 +85,7 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
+
     # await message.add_reaction("🐔")
     # await message.add_reaction("🐣")
     # await message.add_reaction("🐤")
@@ -134,7 +134,7 @@ async def on_message(message):
         command_valid = 1
         arg = message.content.split()
         if not(len(arg) == 3):
-            await error_en(message.channel, "Provided more or less then 3 argument")
+            await error_en(message.channel, "Provided more or less then 2 argument")
             command_valid = 0
         try:
             arg[1] = int(arg[1])
@@ -150,7 +150,7 @@ async def on_message(message):
         command_valid_fr = 1
         arg_fr = message.content.split()
         if not(len(arg_fr) == 3):
-            await error_fr(message.channel, "Il y a plus ou moin de 3 arguments")
+            await error_fr(message.channel, "Il y a plus ou moin de 2 arguments")
             command_valid_fr = 0
         try:
             arg_fr[1] = int(arg_fr[1])
